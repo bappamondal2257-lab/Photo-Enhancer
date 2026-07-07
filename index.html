@@ -4,6 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo In Hands - 4K Enhancer</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js');
+            });
+        }
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
@@ -94,13 +104,11 @@
 
             // 1. Get Target Resolution
             const qualitySelected = document.querySelector('input[name="quality"]:checked').value;
-            let targetWidth = qualitySelected === '4k' ? 3840 : 2560; // 4K or 2K width
+            let targetWidth = qualitySelected === '4k' ? 3840 : 2560; 
             
-            // Calculate height keeping aspect ratio
             const ratio = img.height / img.width;
             let targetHeight = Math.round(targetWidth * ratio);
 
-            // If original image is already bigger than target, don't shrink it
             if (img.width > targetWidth) {
                 targetWidth = img.width;
                 targetHeight = img.height;
@@ -109,26 +117,22 @@
             canvas.width = targetWidth;
             canvas.height = targetHeight;
 
-            // 2. Apply Filters (Contrast & Saturation boost for that "Enhanced" look)
+            // 2. Apply Filters 
             ctx.filter = 'contrast(1.1) saturate(1.15) brightness(1.02)';
             
             // 3. High Quality Upscaling
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
 
-            // Draw Image
             ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
 
-            // Export to JPEG with max quality (1.0)
             canvas.toBlob(function(blob) {
                 document.getElementById('processingMsg').classList.add('hidden');
                 
-                // Show Result
                 const url = URL.createObjectURL(blob);
                 document.getElementById('outputImg').src = url;
                 document.getElementById('downloadLink').href = url;
                 
-                // Show Resolution Stats
                 document.getElementById('oldRes').innerText = `${img.width}x${img.height}`;
                 document.getElementById('newRes').innerText = `${targetWidth}x${targetHeight}`;
                 
