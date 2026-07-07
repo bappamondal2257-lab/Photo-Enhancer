@@ -1,0 +1,15 @@
+{
+  "name": "Photo In Hands - 4K Enhancer",
+  "short_name": "Photo In Hands",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#a855f7",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3342/3342137.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
